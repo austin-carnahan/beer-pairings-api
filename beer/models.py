@@ -6,10 +6,10 @@ class Location(models.Model):
     address3 = models.CharField(max_length=80, blank=True)
     city = models.CharField(max_length=80, blank=False)
     state = models.CharField(max_length=80, blank=True)
-    zipcode = models.IntegerField(blank=True)
+    zipcode = models.IntegerField(blank=True, null=True)
     country = models.CharField(max_length=80, blank=False)
-    lat = models.FloatField(blank=True)
-    lon = models.FloatField(blank=True)
+    lat = models.FloatField(blank=True, null=True)
+    lon = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.city + ", " + self.country
@@ -33,8 +33,8 @@ class Tag(models.Model):
 
 class Beer(models.Model):
     name = models.CharField(max_length=80, blank=False)
-    abv = models.FloatField(blank=True)
-    ibu = models.IntegerField(blank=True)
+    abv = models.FloatField(blank=True, null=True)
+    ibu = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=200, blank=False)
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
