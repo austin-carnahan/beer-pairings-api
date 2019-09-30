@@ -1,7 +1,7 @@
 venv
 *.pyc
 *.sqlite3
-settings.env
+.env
 api/settings/settings.py
 data/mysql/*
 

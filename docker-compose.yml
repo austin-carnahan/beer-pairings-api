@@ -5,23 +5,21 @@ services:
         build: .
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
-            -.:/app_dir
+        - .:/app_dir
         ports:
-            -"8000:8000"
+        - "8000:8000"
         depends_on:
-            -db
+        - db
     db:
         image: mysql:5.7
-        env_file:
-            -settings.env
         environment:
-            -MYSQL_DATABASE: "${MSQL_DATABASE}"
-            -MYSQL_USER: "${MYSQL_USER}"
-            -MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-            -MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        - MYSQL_DATABASE=$MYSQL_DATABASE
+        - MYSQL_USER=$MYSQL_USER
+        - MYSQL_PASSWORD=$MYSQL_PASSWORD
+        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
         volumes:
-            -"data/mysql:/var/lib/mysql"
+        - ./data/mysql:/var/lib/mysql
         ports:
-            -"3306:3306"
+        - "3306:3306"
         
 
