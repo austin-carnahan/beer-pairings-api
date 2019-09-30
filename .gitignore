@@ -1,3 +1,7 @@
 venv
 *.pyc
 *.sqlite3
+settings.env
+api/settings/settings.py
+data/mysql/*
+
