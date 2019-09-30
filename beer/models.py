@@ -46,6 +46,7 @@ class Beer(models.Model):
 
 class Food(models.Model):
     name = models.CharField(max_length=80, blank=False)
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.name
