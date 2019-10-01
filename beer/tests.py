@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APITestCase, API Client
+from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 from .models import Beer, Brewery, Tag, Style, Location
 from .serializers import BeerSerializer
@@ -11,7 +11,7 @@ class BaseViewTest(APITestCase):
     client = APIClient()
 
     @staticmethod
-    def create_beer(beer_name="", ibu="", abv="", description="", brewery_name="", tag_name="", style_basic="", style_detailed="", city="", country="")
+    def create_beer(beer_name="", ibu="", abv="", description="", brewery_name="", tag_name="", style_basic="", style_detailed="", city="", country=""):
         if name != "" and ibu != "" and abv != "" and description != "":
             location = Location(city=city, country=country)
             location.save()
@@ -38,13 +38,13 @@ class GetAllBeersTest(BaseViewTest):
     exist when we make a GET request to the beers/ endpoint
     """
     def test_get_all_beers(self):
-    # hit the API endpoint
-    response = self.client.get(
-        reverse("beers", kwargs={"version":"v1"})
-    )
+        # hit the API endpoint
+        response = self.client.get(
+            reverse("beers-all", kwargs={"version":"v1"})
+        )
 
-    # fetch the data from db
-    expected = Beer.objects.all()
-    serialized = BeerSerializer(expected, many=True)
-    self.assertEqual(response.data, serialized.data)
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # fetch the data from db
+        expected = Beer.objects.all()
+        serialized = BeerSerializer(expected, many=True)
+        self.assertEqual(response.data, serialized.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
