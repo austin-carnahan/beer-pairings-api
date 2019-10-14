@@ -31,6 +31,13 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class Food(models.Model):
+    name = models.CharField(max_length=120, blank=False)
+    tags = models.ManyToManyField(Tag)
+
+    def __str__(self):
+        return self.name
+
 class Beer(models.Model):
     name = models.CharField(max_length=80, blank=False)
     abv = models.FloatField(blank=True, null=True)
@@ -39,14 +46,8 @@ class Beer(models.Model):
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
     sighting = models.ManyToManyField(Location, related_name='sightings')
-    tags = models.ManyToManyField(Tag, related_name='tags')
-
-    def __str__(self):
-        return self.name
-
-class Food(models.Model):
-    name = models.CharField(max_length=80, blank=False)
     tags = models.ManyToManyField(Tag)
+    pairings = models.ManyToManyField(Food, through='Pairing')
 
     def __str__(self):
         return self.name
@@ -55,7 +56,6 @@ class Pairing(models.Model):
     beer = models.ForeignKey(Beer, on_delete=models.CASCADE) 
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     description = models.CharField(max_length=200, blank=True)
-    approved = models.BooleanField(default=False)
     
     def __str__(self):
         return self.food + " with " + self.beer
