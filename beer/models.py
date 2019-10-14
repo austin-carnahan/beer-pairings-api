@@ -72,5 +72,5 @@ class Pairing(models.Model):
     description = models.CharField(max_length=200, blank=True)
     
     def __str__(self):
-        return self.food__name
+        return self.food.name
 
