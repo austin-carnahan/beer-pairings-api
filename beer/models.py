@@ -39,10 +39,21 @@ class Food(models.Model):
         return self.name
 
 class Beer(models.Model):
+
+    SEASON_CHOICES = [
+        ('SP', 'Spring'),
+        ('SU', 'Summer'),
+        ('FA', 'Fall'),
+        ('WI', 'Winter'),
+    ]
+    
     name = models.CharField(max_length=80, blank=False)
     abv = models.FloatField(blank=True, null=True)
     ibu = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=200, blank=False)
+    limited_release = models.BooleanField()
+    seasonal_release = models.BooleanField(blank=True)
+    season = models.CharField(max_length=2, choices= SEASON_CHOICES, blank=True) 
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
     sighting = models.ManyToManyField(Location, related_name='sightings')
