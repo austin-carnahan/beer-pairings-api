@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import Beer
 from .serializers import BeerSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ListBeersView(generics.ListAPIView):
@@ -11,3 +12,6 @@ class ListBeersView(generics.ListAPIView):
 
     queryset = Beer.objects.all()
     serializer_class = BeerSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'abv', 'ibu', 'description']
+    

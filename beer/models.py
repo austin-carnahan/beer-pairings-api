@@ -25,6 +25,9 @@ class Style(models.Model):
     basic = models.CharField(max_length=60, blank=False)
     detailed = models.CharField(max_length=80, blank=True)
 
+    def __str__(self):
+        return self.detailed
+
 class Tag(models.Model):
     name = models.CharField(max_length=40, blank=False)
 
@@ -56,9 +59,9 @@ class Beer(models.Model):
     season = models.CharField(max_length=2, choices= SEASON_CHOICES, blank=True) 
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
-    sighting = models.ManyToManyField(Location, related_name='sightings')
-    tags = models.ManyToManyField(Tag)
-    pairings = models.ManyToManyField(Food, through='Pairing')
+    sighting = models.ManyToManyField(Location, related_name='sightings', blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    pairings = models.ManyToManyField(Food, through='Pairing', blank=True)
 
     def __str__(self):
         return self.name
@@ -69,5 +72,5 @@ class Pairing(models.Model):
     description = models.CharField(max_length=200, blank=True)
     
     def __str__(self):
-        return self.food + " with " + self.beer
+        return self.food__name
 
