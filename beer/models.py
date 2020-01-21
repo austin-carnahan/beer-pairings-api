@@ -16,17 +16,28 @@ class Location(models.Model):
 
 class Brewery(models.Model):
     name = models.CharField(max_length=80, blank=False)
+    description = models.Charfield(max_length=200, blank=True)
+    shuttered = models.BooleanField(null=True, default=None)
+    last_modified = models.DateTimeField(auto_now=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    website = models.URLField(max_length=120)
 
     def __str__(self):
         return self.name
 
 class Style(models.Model):
-    basic = models.CharField(max_length=60, blank=False)
-    detailed = models.CharField(max_length=80, blank=True)
+    name = models.CharField(max_length=60, blank=False)
+    description = models.CharField(max_length=80, blank=True)
 
     def __str__(self):
-        return self.detailed
+        return self.name
+
+class Category(models.Model):
+    name = models.CharField(max_length=60, blank=False)
+    description = models.CharField(max_length=80, blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Tag(models.Model):
     name = models.CharField(max_length=40, blank=False)
@@ -40,7 +51,7 @@ class Food(models.Model):
 
     def __str__(self):
         return self.name
-
+    
 class Beer(models.Model):
 
     SEASON_CHOICES = [
@@ -48,20 +59,24 @@ class Beer(models.Model):
         ('SU', 'Summer'),
         ('FA', 'Fall'),
         ('WI', 'Winter'),
+        ('LR', 'Limited release'),
+        ('YR', 'Year round'),
+        ('RO', 'Rotating'),
     ]
     
     name = models.CharField(max_length=80, blank=False)
-    abv = models.FloatField(blank=True, null=True)
+    abv = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     ibu = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=200, blank=False)
-    limited_release = models.BooleanField(null=True, default=None)
-    seasonal_release = models.BooleanField(null=True, default=None)
-    season = models.CharField(max_length=2, choices= SEASON_CHOICES, blank=True) 
+    availability = models.CharField(max_length=2, choices= SEASON_CHOICES, blank=True) 
+    retired = models.BooleanField(blank=True, Default=None)
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sighting = models.ManyToManyField(Location, related_name='sightings', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     pairings = models.ManyToManyField(Food, through='Pairing', blank=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -73,4 +88,9 @@ class Pairing(models.Model):
     
     def __str__(self):
         return self.food.name
+
+class Review(models.Model):
+    text = models.Charfield(max_length=320, blank=True, default=None)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, default=None)
+    beer = models.ForeignKey(Beer, on_delete=models.CASCADE)
 
